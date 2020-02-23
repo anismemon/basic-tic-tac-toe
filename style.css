@@ -23,11 +23,11 @@ span{
 div[id^="row-"] div {
   width: 200px;
   height: 200px;
-  border: 1px solid red;
+  border: 2px solid black;
   float: left;
   font-family: cursive;
   font-size: 120px;
-  color: green;
+  color: red;
 
 }
 
@@ -62,4 +62,5 @@ div.board {
 
 div[id^="status-bar"] {
   font-family: cursive;
+  font-size: 30px;
 }
