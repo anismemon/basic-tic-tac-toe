@@ -1,6 +1,8 @@
-let startButton = document.getElementById('start')
+let startButton2 = document.getElementById('start2')
+let startButton1 = document.getElementById('start1')
 
-startButton.addEventListener('click', startGame)
+startButton2.addEventListener('click', startGame2)
+startButton1.addEventListener('click', startGame1)
 
 // ------------------------------------------------------------------------------------
 // player objects and global variables
@@ -8,10 +10,8 @@ startButton.addEventListener('click', startGame)
 
 class Player {
   constructor(name, symbol) {
-
     this.name = name
     this.symbol = symbol
-
   }
 }
 
@@ -21,12 +21,12 @@ let playerX = new Player("", "X")
 let playerO = new Player("", "O")
 let currentPlayer
 
-// varibles for getting inputted player names from webpage
+// varibles for getting inputted player names from text input field
 
 let xName = document.getElementById("playerX-name")
 let oName = document.getElementById("playerO-name")
 
-// variables to allow retrieving cell info
+// variables to retrieve cell info
 
 let c0 = document.getElementById('cell-0')
 let c1 = document.getElementById('cell-1')
@@ -49,9 +49,13 @@ let playerStatus = document.getElementById("status-bar")
 
 function gameWin() {
   let index = 0
+
   // loop to iterate through winning array combinations
+
   while (index < 8) {
+
     // winning array combinations
+
     let winningArrays = [
 
       [c0.innerHTML, c1.innerHTML, c2.innerHTML],
@@ -67,17 +71,14 @@ function gameWin() {
     // function to filter arrays for X's and O's
 
     checkedMoves = winningArrays[index].filter(function (value) {
-      console.log(currentPlayer.symbol)
-
       return value === currentPlayer.symbol
-
     })
-
     index++
 
-    // check that returns first array to contain 3 X's or O's
+    // check that returns the first array to contain 3 X's or O's
 
     if (checkedMoves.length === 3) {
+      console.log(index) // I'm not sure how to retrieve (return) this index, but I think I'll need it in order to know which combination was reached so that I can draw a line through the appropriate cells or change their background color.
       return checkedMoves
     }
   }
@@ -98,7 +99,7 @@ function endGame() {
 
 // draw function checks if board has been completely filled
 
-function draw() {
+function tieGame() {
 
   let grid =
     [c0.innerHTML, c1.innerHTML, c2.innerHTML, c3.innerHTML, c4.innerHTML, c5.innerHTML, c6.innerHTML, c7.innerHTML, c8.innerHTML]
@@ -113,23 +114,24 @@ function draw() {
 
 // function to accept player names, insert player into status area, disable start button and start timer
 
-function startGame() {
+function startGame2() {
   playerX.name = xName.value
   playerO.name = oName.value
   currentPlayer = playerX
   playerStatus.innerHTML = currentPlayer.name + "'s Turn";
   event.target.disabled = true
+  startButton1.disabled = true
   xName.value = ""
   oName.value = ""
   let time0 = performance.now()
-  playGame()
+  twoPlayerGame()
   time1 = performance.now()
-  startButton.innerHTML = "Time Elapsed: " + (Math.round(time1 - time0)) + " seconds" // this is meant to be my timer, but it measures how long it takes to click the start button. I think this setup will work, but I don't know where to put the start and end points for the timer.
+  startButton2.innerHTML = "Time Elapsed: " + (Math.round(time1 - time0)) + " seconds" // this is meant to be my timer, but it measures how long it takes to click the start button. I think this setup will work, but I don't know where to put the start and end points for the timer.
 }
 
 // game proper (with switching players)
 
-let playGame = function () {
+let twoPlayerGame = function () {
 
   // add click event to each cell on the grid
 
@@ -145,23 +147,22 @@ let playGame = function () {
         square.innerHTML = currentPlayer.symbol;
       }
 
-      // checks for draw (I'm not sure where to put this: if I put it here at the top, for some reason, it won't print "It's a draw", but it does reset the page. If I put it at the end, it disables winning combinations made on the 9th move.)
-
-      draw()
-      if (fullGrid.length === 9) {
-        playerStatus.innerHTML = "It's a draw!"
-        delayEnding()
-      }
+      // checks for tie       
+      tieGame()
 
       // alternating X / O turns, checking for winning combinations
 
       if (square.innerHTML === "X") {
         gameWin()
-        
+
         if (checkedMoves.length === 3) {
           playerStatus.innerHTML = currentPlayer.name + " wins!"
           delayEnding()
-        } else {
+        } else if (fullGrid.length === 9) {
+          playerStatus.innerHTML = "It's a draw!"
+          delayEnding()
+        }
+        else {
           currentPlayer = playerO
           playerStatus.innerHTML = currentPlayer.name + "'s Turn";
         }
@@ -172,71 +173,126 @@ let playGame = function () {
         if (checkedMoves.length === 3) {
           playerStatus.innerHTML = currentPlayer.name + ' wins!'
           delayEnding()
-        } else {
+        } else if (fullGrid.length === 9) {
+          playerStatus.innerHTML = "It's a draw!"
+          delayEnding()
+        }
+        else {
           currentPlayer = playerX
           playerStatus.innerHTML = currentPlayer.name + "'s Turn";
         }
 
       }
-      // checks for draw
-      // draw()
-      // if (fullGrid.length === 9) {
-      //   playerStatus.innerHTML = "It's a draw!"
-      //   delayEnding()
-      // }
-
-
     }
   }
 }
 
-// need to add clock
-// need to improve variable names
+// ------------------------------------------------------------------------------------------------------------
+// one-player game between human and computer
 
+// starts game, disabling both player option buttons 
 
+function startGame1() {
+  playerX.name = "Player X"
+  playerO.name = "Player O"
+  currentPlayer = playerX
+  playerStatus.innerHTML = currentPlayer.name + "'s Turn";
+  event.target.disabled = true
+  startButton2.disabled = true
+  onePlayerGame()
+}
 
+// random number generator to choose among the available spaces in the board array (by index)
 
-// function gameWin() {
+function randomInt(max, min) {
+  max = board.length - 1
+  min = 0
+  arrayIndex = Math.floor(min + (Math.random() * (max - min + 1)))
+  return arrayIndex
+}
 
-//   let combo1 = [c0.innerHTML, c1.innerHTML, c2.innerHTML]
-//   let combo2 = [c0.innerHTML, c1.innerHTML, c2.innerHTML]
-//   let combo3 = [c0.innerHTML, c4.innerHTML, c8.innerHTML]
-//   let combo4 = [c3.innerHTML, c4.innerHTML, c5.innerHTML]
-//   let combo5 = [c6.innerHTML, c7.innerHTML, c8.innerHTML]
-//   let combo6 = [c1.innerHTML, c4.innerHTML, c7.innerHTML]
-//   let combo7 = [c2.innerHTML, c5.innerHTML, c8.innerHTML]
-//   let combo8 = [c2.innerHTML, c4.innerHTML, c6.innerHTML]
+// main game function 
 
-//   winningCombo1 = combo1.filter(function (value) {
-//     return value === currentPlayer.symbol
-//   })
+board = [c0, c1, c2, c3, c4, c5, c6, c7, c8]
 
-//   winningCombo2 = combo2.filter(function (value) {
-//     return value === currentPlayer.symbol
-//   })
+function onePlayerGame() {
 
-//   winningCombo3 = combo3.filter(function (value) {
-//     return value === currentPlayer.symbol
-//   })
+  for (let square of cells) {
+    square.addEventListener('click', playGame)
 
-//   winningCombo4 = combo4.filter(function (value) {
-//     return value === currentPlayer.symbol
-//   })
+    // functions that use the "square" variable which (due to scope) cannot be defined outside of the onePlayerGame
+    
+    // function to eliminate unplayable spaces from the board 
+    
+    function eliminateCells() {
+      if (board.includes(square)) {
+        let indexOfItem = board.indexOf(square)
+        board.splice(indexOfItem, 1)
+        return board
+      }
+    }
 
-//   winningCombo5 = combo5.filter(function (value) {
-//     return value === currentPlayer.symbol
-//   })
+    // computer's move that puts an O in the HTML and removes the computer's move from the board array
 
-//   winningCombo6 = combo6.filter(function (value) {
-//     return value === currentPlayer.symbol
-//   })
+    function computerMove() {
+      square = board[arrayIndex]
+      square.innerHTML = currentPlayer.symbol
+      board.splice(arrayIndex, 1)
+      return board
+    }
 
-//   winningCombo7 = combo7.filter(function (value) {
-//     return value === currentPlayer.symbol
-//   })
+    function playGame() {
+      // human's part of the game -----------------
 
-//   winningCombo8 = combo8.filter(function (value) {
-//     return value === currentPlayer.symbol
-//   })
-// }
+      // prevents clicking on a filled square by throwing alert
+
+      if (square.innerHTML !== "") {
+        window.alert("Please choose an empty square!")
+      } else {
+        square.innerHTML = currentPlayer.symbol
+        console.log(currentPlayer.symbol)
+      }
+
+      // checks for tie       
+
+      tieGame()
+
+      // after human has selected a cell
+
+      if (square.innerHTML === "X") {
+
+        gameWin()
+        eliminateCells()
+
+        if (checkedMoves.length === 3) {
+          playerStatus.innerHTML = currentPlayer.name + " wins!"
+          delayEnding()
+        } else if (fullGrid.length === 9) {
+          playerStatus.innerHTML = "It's a draw!"
+          delayEnding()
+        } else {
+          currentPlayer = playerO
+          playerStatus.innerHTML = currentPlayer.name + "'s Turn";
+
+          // computer's part of the game -----------------------
+          randomInt()          
+          computerMove()
+          gameWin()
+
+          if (checkedMoves.length === 3) {
+            playerStatus.innerHTML = currentPlayer.name + ' wins!'
+            delayEnding()
+          } else if (fullGrid.length === 9) {
+            playerStatus.innerHTML = "It's a draw!"
+            delayEnding()
+          }
+          else {
+            currentPlayer = playerX
+            playerStatus.innerHTML = currentPlayer.name + "'s Turn";
+          }
+        }
+      }
+    }
+  }
+}
 
