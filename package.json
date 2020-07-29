@@ -1,5 +1,5 @@
 {
-  "name": "tic-tac-toe-www",
+  "name": "basic-tic-tac-toe",
   "version": "1.0.0",
   "description": "Project page: http://js-intro.burlingtoncodeacademy.com/projects/tic-tac-toe-www",
   "main": "main.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BurlingtonCodeAcademy/tic-tac-toe-www.git"
+    "url": "git+https://https://github.com/anismemon/basic-tic-tac-toe"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/BurlingtonCodeAcademy/tic-tac-toe-www/issues"
   },
-  "homepage": "https://github.com/BurlingtonCodeAcademy/tic-tac-toe-www#readme",
+  "homepage": "https://anismemon.github.io/basic-tic-tac-toe/",
   "dependencies": {
     "express": "^4.17.1",
     "node-static": "^0.7.11"
