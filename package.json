@@ -1,7 +1,7 @@
 {
   "name": "basic-tic-tac-toe",
   "version": "1.0.0",
-  "description": "Project page: http://js-intro.burlingtoncodeacademy.com/projects/tic-tac-toe-www",
+  "description": "Project page: https://https://github.com/anismemon/basic-tic-tac-toe",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
